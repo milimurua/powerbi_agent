@@ -1,22 +1,21 @@
-version: 
-
 services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: docker/Dockerfile.backend
     env_file:
       - .env
     ports:
-      - "8000:8000"
+      # Exponemos el backend en el puerto 8080 (interno y externo)
+      - "8080:8080"
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-    env_file:
-      - .env
-    ports:
-      - "8501:8501"
-    depends_on:
-      - backend
+  #frontend:
+  #  build:
+  #    context: .
+  #    dockerfile: docker/Dockerfile.frontend
+  #  env_file:
+  #    - .env
+  #  ports:
+  #    - "8501:8501"
+  #  depends_on:
+  #    - backend
