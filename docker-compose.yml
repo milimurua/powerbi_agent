@@ -4,7 +4,13 @@ services:
       context: .
       dockerfile: docker/Dockerfile.backend
     env_file:
-      - .env
+      - backend/.env
+    volumes:
+      # Montar las credenciales de Google Cloud
+      - ./credentials.json:/app/credentials.json:ro
+    environment:
+      # Sobrescribir la ruta de credenciales para que apunte al contenedor
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
     ports:
       # Exponemos el backend en el puerto 8080 (interno y externo)
       - "8080:8080"

@@ -11,10 +11,13 @@ COPY backend/pyproject.toml .
 
 # Instalamos dependencias principales (puedes luego mejorar esto usando `pip install .`)
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install google-adk google-generativeai python-dotenv
+    && pip install google-adk google-generativeai  google-cloud-bigquery python-dotenv
 
 # Copiamos el código del backend dentro del contenedor
 COPY backend/src ./src
+
+# Copiamos el script de prueba
+COPY backend/test_bigquery.py .
 
 # Aseguramos que Python pueda encontrar el paquete raíz `infrastructure`, `application`, etc.
 ENV PYTHONPATH=/app/src
