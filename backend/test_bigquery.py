@@ -8,7 +8,7 @@ from pathlib import Path
 # Agregar src al path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from infrastructure.outbound.bigquery_client import BigQueryClient
+from infrastructure.outbound.bigquery_client import BigQueryClient  # pyright: ignore[reportMissingImports]
 
 
 def test_connection():

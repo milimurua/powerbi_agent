@@ -6,16 +6,18 @@ from domain.entities.question import Question
 from infrastructure.outbound.gemini_client import GeminiClient
 
 def create_agent():
-    repository = GeminiClient()
-    use_case = AnswerQuestionUseCase(repository)
-
     def handler(message: str) -> str:
-        question = Question(text=message)
-        return use_case.execute(question)
+        try:
+            repository = GeminiClient()
+            use_case = AnswerQuestionUseCase(repository)
+            question = Question(text=message)
+            return use_case.execute(question)
+        except Exception as e:
+            return f"Error: {str(e)}"
 
     return Agent(
-        name="ecommerce-agent",
+        name="powerbi-agent",
         model=Gemini(model="gemini-1.5-flash"),
-        instructions="You are an ecommerce analytics assistant.",
+        instructions="You are an analytics assistant.",
         handler=handler
     )

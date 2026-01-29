@@ -16,6 +16,9 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copiamos el código del backend dentro del contenedor
 COPY backend/src ./src
 
+# Copiamos el root_agent.yaml al directorio raíz
+COPY backend/src/root_agent.yaml ./root_agent.yaml
+
 # Copiamos el script de prueba
 COPY backend/test_bigquery.py .
 
@@ -25,4 +28,4 @@ ENV PYTHONPATH=/app/src
 EXPOSE 8080
 
 # Levantamos el servidor del agente de Google ADK
-CMD ["adk", "web", "src", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["adk", "web", ".", "--host", "0.0.0.0", "--port", "8080"]

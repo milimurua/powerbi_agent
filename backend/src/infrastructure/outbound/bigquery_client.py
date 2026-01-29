@@ -1,5 +1,5 @@
 from google.cloud import bigquery
-from google.oauth2 import service_account
+from google.oauth2 import service_account  # pyright: ignore[reportMissingImports]
 from typing import List, Dict, Any
 import os
 
