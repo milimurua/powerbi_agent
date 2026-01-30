@@ -17,3 +17,4 @@ def answer_question(question_text: str) -> str:
         f"You are an analytics assistant.\nUser question: {question.text}"
     )
 
+
