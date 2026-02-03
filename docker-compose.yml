@@ -1,19 +1,52 @@
 services:
+  postgres:
+    image: postgres:16
+    container_name: db-agent
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent -d agentdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
   backend:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
+    container_name: backend-agent
     env_file:
       - backend/.env
     volumes:
       # Montar las credenciales de Google Cloud
       - ./credentials.json:/app/credentials.json:ro
+      # Montar código para desarrollo (opcional, comentar en producción)
+      - ./backend/src:/app/src
+      - ./backend/alembic:/app/alembic
+      - ./backend/alembic.ini:/app/alembic.ini
     environment:
       # Sobrescribir la ruta de credenciales para que apunte al contenedor
       - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
+      # Configuración de base de datos para Docker
+      - DATABASE_URL=postgresql+psycopg://${POSTGRES_USER:-agent}:${POSTGRES_PASSWORD:-agent}@postgres:5432/${POSTGRES_DB:-agentdb}
+      - POSTGRES_HOST=postgres
     ports:
       # Exponemos el backend en el puerto 8080 (interno y externo)
       - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+    pgdata:
 
   #frontend:
   #  build:

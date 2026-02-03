@@ -10,7 +10,7 @@ class GeminiClient(AnalyticsRepository):
         if not settings.GEMINI_API_KEY:
             raise RuntimeError("Missing GEMINI_API_KEY env var")
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        self.model = genai.GenerativeModel("gemini-2.5-flash")
+        self.model = genai.GenerativeModel("gemini-2.0-flash")
 
     def run_query(self, prompt: str) -> str:
         response = self.model.generate_content(prompt)
