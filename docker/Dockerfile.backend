@@ -25,7 +25,7 @@ COPY backend/alembic.ini ./alembic.ini
 
 # Copiamos los scripts de prueba
 COPY backend/test_bigquery.py .
-COPY backend/test_database.py .
+#COPY backend/test_database.py .
 
 # Aseguramos que Python pueda encontrar el paquete raíz `infrastructure`, `application`, etc.
 ENV PYTHONPATH=/app/src:/app
