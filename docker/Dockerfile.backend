@@ -11,7 +11,9 @@ COPY backend/pyproject.toml .
 
 # Instalamos dependencias principales
 RUN pip install --upgrade pip \
-    && pip install google-adk google-generativeai google-cloud-bigquery python-dotenv psycopg[binary] sqlalchemy alembic fastapi uvicorn
+      && pip install google-adk google-generativeai google-cloud-bigquery \
+       python-dotenv psycopg[binary] sqlalchemy alembic fastapi uvicorn \
+       "redis>=5.0.0"
 
 # Copiamos el código del backend dentro del contenedor
 COPY backend/src ./src
@@ -24,7 +26,7 @@ COPY backend/alembic ./alembic
 COPY backend/alembic.ini ./alembic.ini
 
 # Copiamos los scripts de prueba
-COPY backend/test_bigquery.py .
+#COPY backend/test_bigquery.py .
 #COPY backend/test_database.py .
 
 # Aseguramos que Python pueda encontrar el paquete raíz `infrastructure`, `application`, etc.

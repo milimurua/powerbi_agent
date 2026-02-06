@@ -18,6 +18,20 @@ services:
       timeout: 3s
       retries: 20
 
+  redis:
+    image: redis:7-alpine
+    container_name: powerbi_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   backend:
     build:
       context: .
@@ -38,15 +52,21 @@ services:
       # Configuración de base de datos para Docker
       - DATABASE_URL=postgresql+psycopg://${POSTGRES_USER:-agent}:${POSTGRES_PASSWORD:-agent}@postgres:5432/${POSTGRES_DB:-agentdb}
       - POSTGRES_HOST=postgres
+       # Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       # Exponemos el backend en el puerto 8080 (interno y externo)
       - "8080:8080"
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_healthy 
+      redis:
+        condition: service_healthy   
 
 volumes:
     pgdata:
+    redis_data:
 
   #frontend:
   #  build:
